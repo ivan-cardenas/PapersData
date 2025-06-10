@@ -42,6 +42,10 @@ section {
 h2 {
     color: #004e61;
 }
+h4 {
+    color: #fcfcfc;
+    margin: 2rem;
+}
 
 a{
     color: #ffcd00;
@@ -76,4 +80,54 @@ footer {
     padding: 1rem 0;
     margin-top: 2rem;
     font-size: 0.9rem;
+}
+
+nav {
+    background: #21435c;         /* Deep blue background */
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+nav ul {
+    list-style: none;            /* Remove bullets */
+    margin: 0;
+    padding: 0;
+    display: flex;               /* Horizontal layout */
+    justify-content: center;     /* Center items horizontally */
+    gap: 2rem;                   /* Space between items */
+}
+
+nav ul li {
+    display: inline;             /* Not strictly needed, but explicit */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0;              /* Light text for contrast */
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;         /* Pill-like look */
+    transition: background 0.2s, color 0.2s;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    background: #3baee7;         /* Cyan on hover */
+    color: #163042;
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+        align-items: stretch;
+    }
+    nav ul li a {
+        border-radius: 0;
+        text-align: left;
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
 }
