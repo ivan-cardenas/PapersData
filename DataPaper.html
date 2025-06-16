@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cross sectoral planning Drinking Water-Urban Heat-Housing Provision dataset</title>
+    <title>Cross sectoral planning Indicators</title>
     <link rel="stylesheet" href="Assets/Styles.css">
 </head>
 <body>
@@ -13,20 +13,24 @@
         </ul>
     </nav>  
     <header>
-        <h1>Cross sectoral planning Drinking Water-Urban Heat-Housing Provision dataset</h1>
+        
+        <h1>Cross sectoral planning: Drinking Water-Urban Heat-Housing Provision Indicators dataset</h1>
         <h3>Department of Urban and Regional Planning and Geo-Information Management, Faculty of Geo-Information Science and Earth Observation (ITC), University
 of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</h3>
         <h>Iván Cardenas-Leon | Pirouz Nourian | Mila Koeva | Karin Pfeffer </h>
         <p>DOI: <a href="https://doi.org/10.5281/zenodo.1234567">10.5281/zenodo.1234567</a></p>
         <p>Published: 2025-01-01</p>
     </header>
+    
+    <div class="container">
+        
     <main>
         <section>
-            <h2>Abstract</h2>
+            <h2 id="abstract">Abstract</h2>
             <p>This dataset paper presents a comprehensive compilation of indicators covering three major
 domains: drinking water supply, urban heat, and housing provision. The data were system-
 atically collected from a wide range of peer-reviewed papers to ensure a robust foundation
-for both academic research and practical policy analysis. The dataset includes a total of XXX
+for both academic research and practical policy analysis. The dataset includes a total of 280
 indicators, each categorized and described. The indicators are organized into a relational
 database format, which allows for easy access and manipulation. The dataset was collected
 to facilitate cross-sectoral analysis, enabling researchers and practitioners to explore the
@@ -36,16 +40,58 @@ data provenance information. Additionally, the dataset is organized in a relatio
 database, allowing users to perform advanced queries, join operations, and custom analyses.
 Potential applications span a variety of research areas, such as urban planning, environmental
 impact assessment, public health, and socio-economic studies.</p>
-<p>This abstract serves as a placeholder for the final summary. Users are encouraged to
-cite this dataset paper and provide feedback to further improve its coverage and quality in
-future updates.</p>
-            <h2>Interactive Data</h2>
+
+            <h2 id="overview">Indicators Overview</h2>
+            <p>This is a quick view of all the indicators present in this dataset. You can use the filters and click interactively to see all the indicators per sector. After this you can explore with more detail sector by sector</p>
             <div class="flourish-embed flourish-hierarchy" data-src="visualisation/23542583"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23542583/thumbnail" width="100%" alt="hierarchy visualization" /></noscript></div>
+            <h3 id="water">Drinking Water Supply Indicators</h3>
+            <p>Indicators related to the availability, quality, and accessibility of drinking water in urban areas. Here you can see the details of description and calculation of each indicator</p>
+            <div class="flourish-embed flourish-hierarchy" data-src="visualisation/23542969"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23542969/thumbnail" width="100%" alt="hierarchy visualization" /></noscript></div>
+            <h3 id="heat">Heat Stress Indicators</h3>
+            <p>Indicators that measure the urban heat island effect, temperature variations, and their impacts on outdoor heat stress. Here you can see the details of description and calculation of each indicator</p>
+            <div class="flourish-embed flourish-hierarchy" data-src="visualisation/23564625"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23564625/thumbnail" width="100%" alt="hierarchy visualization" /></noscript></div>
+            <h3 id="housing">Housing Provision Indicators</h3>
+            <p>Indicators that assess the availability, affordability, and quality of housing in urban settings. Here you can see the details of description and calculation of each indicator</p>
+            <div class="flourish-embed flourish-hierarchy" data-src="visualisation/23565099"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23565099/thumbnail" width="100%" alt="hierarchy visualization" /></noscript></div>
+
+        p>
         </section>
+  
     </main>
+        <aside class="toc">
+    <h3>On this page</h3>
+    <ul></ul>  <!-- JS will fill this -->
+  </aside>
+</div>
     <footer>
         <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
     </footer>
+<script>
+  // find the <ul> in your aside
+  const tocList = document.querySelector('.toc ul');
+
+  // select all headings you want in the menu
+  const headings = document.querySelectorAll('main h2, main h3');
+
+  headings.forEach(h => {
+    // ensure each has an id
+    if (!h.id) {
+      h.id = h.textContent
+              .toLowerCase()
+              .trim()
+              .replace(/[^a-z0-9]+/g,'-');
+    }
+
+    // build the list item
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = `#${h.id}`;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+</script>
+
 </body>
 </html>
 
