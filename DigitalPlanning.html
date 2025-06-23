@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Planning through Directed Acyclic Graphs</title>
+    <link rel="stylesheet" href="Assets/Styles.css">
+</head>
+<body>
+     <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>  
+    <header>
+        <h1>Digital Planning through Directed Acyclic Graphs</h1>
+        <h3>Backward-Chaining Key Indicators and DPSIR Classification across
+Water, Heat, and Housing Systems</h3>
+<h3>Department of Urban and Regional Planning and Geo-Information Management, Faculty of Geo-Information Science and Earth Observation (ITC), University
+of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</h3>
+        <h>Iván Cardenas-Leon | Pirouz Nourian | Mila Koeva | Karin Pfeffer </h>
+        <p>DOI: <a href="https://doi.org/10.5281/zenodo.1234567">10.5281/zenodo.1234567</a></p>
+        <p>Published: 2025-07-24</p>
+    </header>
+    <main>
+        <section>
+            <h2>Abstract</h2>
+            <p>This is the Causal Chain for water supply planning and monitoring</p>
+            <h2>Interactive Data</h2>
+            <div class="flourish-embed flourish-network" data-src="visualisation/23896036"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23896036/thumbnail" width="100%" alt="network visualization" /></noscript></div>
+        </section>
+    </main>
+    <aside class="toc">
+    <h3>On this page</h3>
+    <ul></ul>  <!-- JS will fill this -->
+  </aside>
+  <script>
+  // find the <ul> in your aside
+  const tocList = document.querySelector('.toc ul');
+
+  // select all headings you want in the menu
+  const headings = document.querySelectorAll('main h2, main h3');
+
+  headings.forEach(h => {
+    // ensure each has an id
+    if (!h.id) {
+      h.id = h.textContent
+              .toLowerCase()
+              .trim()
+              .replace(/[^a-z0-9]+/g,'-');
+    }
+
+    // build the list item
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = `#${h.id}`;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+</script>
+    <footer>
+        <p>&copy; 2024 Your Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>
