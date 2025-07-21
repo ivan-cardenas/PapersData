@@ -180,3 +180,7 @@ aside.toc a:hover {
         flex-direction: column;
     }
 }
+
+#paths-table{
+    font-size: smaller;
+}
