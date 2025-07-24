@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Planning through Directed Acyclic Graphs</title>
     <link rel="stylesheet" href="Assets/Styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css">
-   <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-   <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
+
 
 </head>
 <body>
@@ -34,10 +29,18 @@ of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</h3>
             <h2>Abstract</h2>
             <p>This is the Causal Chain for water supply planning and monitoring</p>
             <h2>Interactive Data</h2>
+            <h3 id="waterChain">Water supply system Causal chain</h3>
+            <p>In this section, you can explore the causal chain for water supply planning and monitoring. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
             <div class="flourish-embed flourish-network" data-src="visualisation/23896036"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23896036/thumbnail" width="100%" alt="network visualization" /></noscript></div>
+            <h3 id="heatChain">Urban Heat Stress Causal chain</h3>
+            <p>In this section, you can explore the causal chain for urban heat stress. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
+            <div class="flourish-embed flourish-network" data-src="visualisation/21158386"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/21158386/thumbnail" width="100%" alt="network visualization" /></noscript></div>
+            <h3 id="houseChain">Housing provision Causal chain</h3>
+            <p>In this section, you can explore the causal chain for housing provision. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
+            <div class="flourish-embed flourish-network" data-src="visualisation/23843933"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/23843933/thumbnail" width="100%" alt="network visualization" /></noscript></div>
         </section>
         <section>
-            <h2 id="Connected">Connected</h2>
+            <h2 id="Connected">Integrated DAM</h2>
 <object
   data="Assets/Connected.pdf"
   type="application/pdf"
@@ -49,46 +52,6 @@ of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</h3>
   <p>
     Your browser does not support PDFs. Here's a link to <a href="Assets/Connected.pdf"> the PDF</a> instead.
   </p>
-</object>
-
-            <h2 id="paths">Path Analysis</h2>
-            <p>in this table you can see all the relation paths in the integrated DAG</p>
-            <table id="paths-table" class="display" style="width:100%"></table>
-
-  <!-- 2) DataTables JS -->
-  <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-  <!-- 3) PapaParse for CSV parsing -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.1/papaparse.min.js"></script>
-
-  <!-- 4) Initialization -->
-  <script>
-  $(document).ready(function() {
-    Papa.parse('Assets/All_paths.csv', {
-      download: true,
-      header: true,
-      error: function(err) {
-        console.error('PapaParse error:', err);
-      },
-      complete: function(results) {
-        // log the first few rows as a sanity check
-        console.log('Parsed rows:', results.data.slice(0,5));
-        $('#paths-table').DataTable({
-          data: results.data,
-          columns: [
-            { title: 'Source', data: 'Source' },
-            { title: 'Target', data: 'Target' },
-            { title: 'Path',   data: 'Path'   },
-            { title: 'Steps',  data: 'Steps'  }
-          ],
-          order: [[3, 'desc']],
-          paging:   true,
-          searching:true
-        });
-      }
-    });
-  });
-  </script>
-
     <h3>On this page</h3>
     <ul></ul>  <!-- JS will fill this -->
   </aside>
