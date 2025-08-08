@@ -1,50 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Data</title>
-    <link rel="stylesheet" href="Assets/Styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Research Data</title>
+  <link rel="stylesheet" href="Assets/Styles.css">
 </head>
 <body>
-    <header>
-        <h1>Research Data Archive</h1>
-        <p>Explore and access data from my published papers.</p>
-    </header>
-    <main>
-        <section>
-            <h2>Published Data</h2>
-            <h3>2025</h3>
-            <ul class="data-list">
-                <li><a href="DigitalPlanning.html">Digital Planning through Directed Acyclic Graphs</a></li>
-                <li><a href="DataPaper.html">Cross sectoral planning Drinking Water-Urban Heat-Housing Provision dataset</a></li>
-                <li><a href="paper2.html">Soon...</a></li>
-                <li><a href="paper3.html">Soon...</a></li>
-                <!-- Add more links as needed -->
-            </ul>
-            <h3>2024</h3>
-            <ul class="data-list">
-                <!-- Add more links as needed -->
-            </ul>
-            <h3>2023</h3>
-            <ul class="data-list">
+  <!-- required by main.js -->
+  <div class="progress" id="progress"></div>
+  <a href="#main" class="skip-link">Skip to content</a>
 
-            </ul>   
-            <h3>2022</h3>
-            <ul class="data-list">
-                <li><a href="SenegalFisheries.html">MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small scale fisheries</a></li>
-                <!-- Add more links as needed -->
-        </section>
-        <section>
-            <h2>Visit my store</h2>
-            <p>Check out my <a href="https://overlaymaps.com">store</a> for maps on prints, shirts, hoodies and more!</p>
-        </section>
-        <section>
-            <h2>Contact</h2>
-            <p>If you have any questions or need further information, please contact me at <a href="mailto: ivan.cardenas@overlaymaps.com"> my email</a>.</p>
+  <!-- same nav structure/classes as your main page -->
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2l7 4v12l-7 4-7-4V6l7-4z" stroke="#ffcd00" stroke-width="1.5"/>
+        </svg>
+        <span>My Research</span>
+      </a>
+      <div class="nav-links">
+        <a href="#published-data">Published Data</a>
+        <a href="#store">Store</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Theme</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- header uses same hero styling -->
+  <header>
+    <div class="hero">
+      <h1 class="reveal"><span class="anchor-wrap">Research Data Archive</span></h1>
+      <h3 class="reveal">Explore and access data from Ivan Cárdenas-León published papers.</h3>
+    </div>
+    <div class="blob"></div>
+    <div class="blob b2"></div>
+  </header>
+
+  <div class="container">
+    <main id="main">
+      <!-- Published Data -->
+      <section class="card reveal">
+        <h2 id="published-data"><span class="anchor-wrap">Published Data</span></h2>
+
+        <h3><span class="anchor-wrap">2025</span></h3>
+        <ul class="data-list">
+          <li><a href="DigitalPlanning.html">Digital Planning through Directed Acyclic Graphs</a></li>
+          <li><a href="DataPaper.html">Cross-sectoral planning: Drinking Water – Urban Heat – Housing Provision dataset</a></li>
+          <li><a href="paper2.html">Soon...</a></li>
+          <li><a href="paper3.html">Soon...</a></li>
+        </ul>
+
+        <h3><span class="anchor-wrap">2024</span></h3>
+        <ul class="data-list">
+          <!-- Add more links as needed -->
+        </ul>
+
+        <h3><span class="anchor-wrap">2023</span></h3>
+        <ul class="data-list">
+          <!-- Add more links as needed -->
+        </ul>
+
+        <h3><span class="anchor-wrap">2022</span></h3>
+        <ul class="data-list">
+          <li><a href="SenegalFisheries.html">MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small-scale fisheries</a></li>
+        </ul>
+      </section>
+
+      <!-- Store -->
+      <section class="card reveal">
+        <h2 id="store"><span class="anchor-wrap">Visit my store</span></h2>
+        <p>Check out my <a href="https://overlaymaps.com">store</a> for maps on prints, shirts, hoodies and more!</p>
+      </section>
+
+      <!-- Contact -->
+      <section class="card reveal">
+        <h2 id="contact"><span class="anchor-wrap">Contact</span></h2>
+        <p>If you have any questions or need further information, please contact me at
+          <a href="mailto:ivan.cardenas@overlaymaps.com">ivan.cardenas@overlaymaps.com</a>.
+        </p>
+      </section>
     </main>
-    <footer>
-        <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
-    </footer>
+
+    <!-- same TOC structure (built by JS) -->
+    <aside class="toc">
+      <h3>On this page</h3>
+      <ul id="toc-list"></ul>
+    </aside>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
+  </footer>
+
+  <!-- back-to-top button expected by JS -->
+  <div class="to-top" id="to-top">
+    <button aria-label="Back to top">↑ Top</button>
+  </div>
+
+  <!-- your scripts -->
+  <script defer src="Assets/main.js"></script>
 </body>
 </html>

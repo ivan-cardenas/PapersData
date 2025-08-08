@@ -1,37 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small scale fisheries</title>
-    <link rel="stylesheet" href="Assets/Styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small scale fisheries</title>
+  <link rel="stylesheet" href="Assets/Styles.css" />
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-        </ul>
-    </nav>   
-    <header>
-        <h1>MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small scale fisheries</h1>
-        <h3>Iván Cardenas-Leon |  LAKSHMIPRIYA SABU | EMERALD AWUOR </h3>
-        <h4>Department of Urban and Regional Planning and Geo-Information Management, Faculty of Geo-Information Science and Earth Observation (ITC), University
-of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</h4>
-        <h4>Global Challenges, Local Actions course, M-GEO program, University of Twente</h4>
-        <p>DOI: <a href="https://doi.org/10.5281/zenodo.15633130">10.5281/zenodo.15633130</a></p>
-        <p>Published: 2022-04-21</p>
-    </header>
-    <main>
-        <section>
-            <h2>Abstract</h2>
-            <p>This repository contains the original presentation and methodology developed in March–April 2022 for modeling the redistribution of marine food resources using origin–destination flows, CO2 fuel cost estimation, and Furness modeling.  Developed independently as part of the course "Global Challenges, Local Actions" at the M-GEO program at the University of Twente. This work includes all figures, calculations, and visualizations used in the original project submission and final presentation.</p>
-            <h2>Presentation</h2>
-            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQv8RfDma8wf6bIKuUVE0dnuU6aaQiEk2rmhDv6b3S6C8tRNHYRSt675DX-GOh1b-JFasCI4d2LeCFK/pubembed?start=true&loop=false&delayms=5000" frameborder="0" width="100%" height="839" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-        </section>
+  <!-- reading progress -->
+  <div class="progress" id="progress"></div>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- NAV (same structure as other pages) -->
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2l7 4v12l-7 4-7-4V6l7-4z" stroke="#ffcd00" stroke-width="1.5"/>
+        </svg>
+        <span>Other research</span>
+      </a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#presentation">Presentation</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Theme</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header>
+    <div class="hero">
+      <h1 class="reveal">
+        <span class="anchor-wrap">MAPPING ECOSYSTEM SERVICE FLOWS IN SENEGAL: Sardinella protein flows from small scale fisheries</span>
+      </h1>
+      <p class="authors reveal">Iván Cardenas-Leon | LAKSHMIPRIYA SABU | EMERALD AWUOR</p>
+      <p class="affil reveal">
+        Department of Urban and Regional Planning and Geo-Information Management, Faculty of Geo-Information Science and Earth Observation (ITC), University
+        of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands
+      </p>
+      <p class="affil reveal">Global Challenges, Local Actions course, M-GEO program, University of Twente</p>
+      <p class="meta reveal">
+        DOI: <a href="https://doi.org/10.5281/zenodo.15633130">10.5281/zenodo.15633130</a> &nbsp;•&nbsp; Published: 2022-04-21
+      </p>
+    </div>
+    <div class="blob"></div>
+    <div class="blob b2"></div>
+  </header>
+
+  <div class="container">
+    <main id="main">
+      <section class="card reveal">
+        <h2 id="abstract">
+          <span class="anchor-wrap">Abstract <button class="copy-link" aria-label="Copy link">#</button></span>
+        </h2>
+        <p>
+          This repository contains the original presentation and methodology developed in March–April 2022 for modeling the redistribution of marine food resources
+          using origin–destination flows, CO2 fuel cost estimation, and Furness modeling. Developed independently as part of the course
+          "Global Challenges, Local Actions" at the M-GEO program at the University of Twente. This work includes all figures, calculations,
+          and visualizations used in the original project submission and final presentation.
+        </p>
+      </section>
+
+      <section class="card reveal">
+        <h2 id="presentation">
+          <span class="anchor-wrap">Presentation <button class="copy-link" aria-label="Copy link">#</button></span>
+        </h2>
+        <iframe
+          src="https://docs.google.com/presentation/d/e/2PACX-1vQv8RfDma8wf6bIKuUVE0dnuU6aaQiEk2rmhDv6b3S6C8tRNHYRSt675DX-GOh1b-JFasCI4d2LeCFK/pubembed?start=true&loop=false&delayms=5000"
+          frameborder="0"
+          width="100%"
+          height="839"
+          allowfullscreen="true"
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true">
+        </iframe>
+      </section>
     </main>
-    <footer>
-        <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
-    </footer>
+
+    <!-- TOC -->
+    <aside class="toc">
+      <h3>On this page</h3>
+      <ul id="toc-list"></ul>
+    </aside>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
+  </footer>
+
+  <!-- back to top -->
+  <div class="to-top" id="to-top">
+    <button aria-label="Back to top">↑ Top</button>
+  </div>
+
+  <!-- Only our behavior JS (no Flourish needed on this page) -->
+  <script defer src="Assets/main.js"></script>
 </body>
 </html>
-
