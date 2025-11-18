@@ -1,0 +1,133 @@
+\
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Planning through Directed Acyclic Graphs</title>
+  <link rel="stylesheet" href="Assets/Styles.css">
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2l7 4v12l-7 4-7-4V6l7-4z" stroke="#ffcd00" stroke-width="1.5"/>
+        </svg>
+        <span>Other research</span>
+      </a>
+      <div class="nav-links">
+        <a href="#waterChain">Water</a>
+        <a href="#heatChain">Heat</a>
+        <a href="#houseChain">Housing</a>
+        <a href="#Connected">Integrated Model</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Theme</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER / HERO -->
+  <header>
+    <div class="hero">
+      <h1 class="reveal"><span class="anchor-wrap">Digital Planning through Directed Acyclic Model</span></h1>
+      <h3 class="reveal">Backward-Chaining Key Indicators and DPSIR Classification across Water, Heat, and Housing Systems</h3>
+      <p class="affil reveal">Department of Urban and Regional Planning and Geo-Information Management, Faculty of Geo-Information Science and Earth Observation (ITC), University of Twente, Hallenweg 8, Enschede, 7522 NH, Overijssel, Netherlands</p>
+      <p class="authors reveal">Iván Cardenas-Leon | Pirouz Nourian | Mila Koeva | Karin Pfeffer</p>
+      <p class="meta reveal">DOI: in progress</p>
+      <p class="keywords reveal" style="font-size: smaller;">Keywords: Planning Support Systems, Directed Acyclic Graph, Multi-sectoral integration, Causal reasoning, Evidence-based planning</p>
+    </div>
+    <div class="blob"></div>
+    <div class="blob b2"></div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="container">
+    <main id="main">
+
+      <section class="card reveal">
+        <h2><span class="anchor-wrap">Abstract <button class="copy-link" aria-label="Copy link">#</button></span></h2>
+        <p>Digital planning for urban systems demands an integrated framework that can capture cross-sectoral dependencies, support causal reasoning, and remain adaptable to diverse data sources. In this paper, we introduce a novel methodology that combines backward-chaining analysis with a directed acyclic model (DAM) to identify, decompose, and interlink key performance indicators across three critical planning domains: drinking water supply, urban heat stress, and housing provision. First, building on a comprehensive indicator review conducted in a prior study, we selected the top 50% most frequently reported indicators as targets for our analysis. Using backward chaining, we trace each indicator back to its fundamental drivers, classifying variables into Driving forces, Pressures, State, Impacts, and Responses (DPSIR). We then quantify relational dependencies and centrality metrics to construct a sector-specific DAM for each domain, specifying required data objects and calculation functions. Finally, we merge overlapping objects—such as population growth, urbanization, and meteorological inputs—into an integrated cross-sector DAM, revealing critical causal pathways and enabling scenario testing under varied driver assumptions (e.g., climate change scenarios, demographic shifts, credit conditions). Our results highlight how infrastructural and natural-system interventions propagate through water reliability, thermal comfort, and housing affordability. The proposed framework not only clarifies data interoperability requirements and analytic workflows for digital planning tools but also offers a scalable template for extending cross-sectoral impact analysis to additional urban challenges. By structuring complex interactions into a unified, computable schema, this approach empowers planners to evaluate trade-offs, test policy scenarios, and support evidence-based decision-making in rapidly evolving urban contexts.</p>
+      </section>
+
+      <section class="card reveal">
+        <h2 id="waterChain"><span class="anchor-wrap">Water supply system <button class="copy-link" aria-label="Copy link">#</button></span></h2>
+        <h3>Causal Chain</h3>
+        <p>Explore the causal chain for water supply planning and monitoring. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
+        <div class="flourish-embed flourish-network" data-src="visualisation/23896036"></div>
+
+        <h3>Directed Acyclic Model</h3>
+        <details class="pdf">
+          <summary><span class="summary-icon">↧</span> View Water System diagram (PDF)</summary>
+          <object class="pdf-object" data-src="Assets/WaterSystem.pdf" type="application/pdf" title="Water System PDF">
+            <p>Your browser does not support PDFs. Here's a <a href="Assets/WaterSystem.pdf">link to the PDF</a> instead.</p>
+          </object>
+        </details>
+      </section>
+
+      <section class="card reveal">
+        <h2 id="heatChain"><span class="anchor-wrap">Urban Heat Stress <button class="copy-link" aria-label="Copy link">#</button></span></h2>
+        <h3>Causal Chain</h3>
+        <p>Explore the causal chain for urban heat stress. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
+        <div class="flourish-embed flourish-network" data-src="visualisation/21158386"></div>
+
+        <h3>Directed Acyclic Model</h3>
+        <details class="pdf">
+          <summary><span class="summary-icon">↧</span> View Heat Architecture diagram (PDF)</summary>
+          <object class="pdf-object" data-src="Assets/heatArchitecture.pdf" type="application/pdf" title="Heat Architecture PDF">
+            <p>Your browser does not support PDFs. Here's a <a href="Assets/heatArchitecture.pdf">link to the PDF</a> instead.</p>
+          </object>
+        </details>
+      </section>
+
+      <section class="card reveal">
+        <h2 id="houseChain"><span class="anchor-wrap">Housing provision <button class="copy-link" aria-label="Copy link">#</button></span></h2>
+        <h3>Causal Chain</h3>
+        <p>Explore the causal chain for housing provision. The interactive visualization allows you to see the relationships between different indicators and their classifications.</p>
+        <div class="flourish-embed flourish-network" data-src="visualisation/23843933"></div>
+
+        <h3>Directed Acyclic Model</h3>
+        <details class="pdf">
+          <summary><span class="summary-icon">↧</span> View Housing DAG (PDF)</summary>
+          <object class="pdf-object" data-src="Assets/DAG_Housing.pdf" type="application/pdf" title="Housing DAG PDF">
+            <p>Your browser does not support PDFs. Here's a <a href="Assets/DAG_Housing.pdf">link to the PDF</a> instead.</p>
+          </object>
+        </details>
+      </section>
+
+      <section class="card reveal">
+        <h2 id="Connected"><span class="anchor-wrap">Integrated Directed Acyclic Model <button class="copy-link" aria-label="Copy link">#</button></span></h2>
+        <p>This is the integrated model across the three planning sectors. Explore the full model and the interrelations present from object to object. In dark blue there is a descriptive function that should be included when transforming the model into an operational tool.</p>
+        <details class="pdf" open>
+          <summary><span class="summary-icon">↧</span> View Integrated Model (PDF)</summary>
+          <object class="pdf-object" data-src="Assets/Connected.pdf" type="application/pdf" title="Integrated Model PDF">
+            <p>Your browser does not support PDFs. Here's a <a href="Assets/Connected.pdf">link to the PDF</a> instead.</p>
+          </object>
+        </details>
+      </section>
+
+    </main>
+
+    <!-- TOC -->
+    <aside class="toc">
+      <h3>On this page</h3>
+      <ul id="toc-list"></ul>
+    </aside>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Ivan Cardenas Leon. All rights reserved.</p>
+  </footer>
+
+  <div class="to-top" id="to-top">
+    <button aria-label="Back to top">↑ Top</button>
+  </div>
+
+  <!-- Load Flourish once, then our JS -->
+  <script src="https://public.flourish.studio/resources/embed.js" defer></script>
+  <script defer src="Assets/main.js"></script>
+</body>
+</html>
