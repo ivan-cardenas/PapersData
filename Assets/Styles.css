@@ -1,6 +1,6 @@
 :root {
-  --brand-primary: #20548f;
-  --brand-secondary: #1e316e;
+  --brand-primary: #2b76cc;
+  --brand-secondary: #040b22;
   --accent: #e34a42;
   --highlight: #ffcd00;
   --hover: #3baee7;
@@ -69,9 +69,9 @@ nav {
 header {
   position: relative; isolation: isolate; overflow: clip;
   color: #fff; text-align: center; padding: clamp(2rem, 3vw, 3rem) 1rem;
-  background: radial-gradient(1200px 500px at 10% -20%, #0b3a46 10%, transparent 70%),
-              radial-gradient(800px 600px at 90% -30%, #0a2d43 5%, transparent 65%),
-              linear-gradient(135deg, var(--brand-primary), #0d2230);
+  background: radial-gradient(1200px 500px at 10% -20%, #cef5d3 10%, transparent 70%),
+              radial-gradient(800px 600px at 90% -30%, #07e7a4 5%, transparent 65%),
+              linear-gradient(135deg, var(--brand-primary), #4c5053);
 }
 header .hero { max-width: 1100px; margin: 0 auto; }
 header h1 { margin: 0 0 .5rem; font-size: clamp(1.75rem, 2.5vw, 2.6rem); font-weight: 800; letter-spacing: .2px; }

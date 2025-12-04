@@ -482,18 +482,18 @@
           <span>🌡️</span>
           <div class="tool-tooltip">Heat</div>
         </button>
-        <button class="tool-button" data-tool="transport">
+        <!-- <button class="tool-button" data-tool="transport">
           <span>🚊</span>
           <div class="tool-tooltip">Mobility</div>
-        </button>
+        </button> -->
         <button class="tool-button" data-tool="energy">
           <span>⚡</span>
           <div class="tool-tooltip">Energy</div>
         </button>
-        <button class="tool-button" data-tool="mobility">
+        <!-- <button class="tool-button" data-tool="mobility">
           <span>🚗</span>
           <div class="tool-tooltip">Traffic</div>
-        </button>
+        </button> -->
         <button class="tool-button" data-tool="green">
           <span>🌳</span>
           <div class="tool-tooltip">Green</div>
@@ -582,8 +582,8 @@
 
     const map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/light-v11",
-      center: [7.9, 51.96],          // pick whatever matches your area
+      style: "mapbox://styles/mapbox/light-v12",
+      center: [6.8950, 52.2190],          // pick whatever matches your area
       zoom: 16,
       pitch: 60,
       bearing: -35
@@ -602,6 +602,7 @@
         }
       }
 
+      // ---------------- 3D BUILDINGS ----------------
       map.addLayer(
         {
           id: "3d-buildings",
@@ -611,7 +612,7 @@
           type: "fill-extrusion",
           minzoom: 13,
           paint: {
-            "fill-extrusion-color": "#d88a2d",
+            "fill-extrusion-color": "#d0e0f0",
             "fill-extrusion-height": [
               "interpolate",
               ["linear"],
@@ -630,12 +631,75 @@
               16,
               ["get", "min_height"]
             ],
-            "fill-extrusion-opacity": 0.9
+            "fill-extrusion-opacity": 0.8
           }
         },
         labelLayerId
       );
+    
+
+    // ---------------- HEAT LAYERS ----------------
+    map.addSource("heat-grid", {
+      type: "geojson",
+      data: "/Assets/Heat_Enschede.json"
+    })
+
+    map.addLayer({
+  id: "heat-hex",
+  type: "fill-extrusion",
+  source: "heat-grid",
+  paint: {
+    "fill-extrusion-color": [
+      "interpolate",
+      ["linear"],
+      ["get", "ZonalSt_CityCen1.MEDIAN"],
+      39, "#000000",
+      52, "#ffffff"
+    ],
+    "fill-extrusion-height": [
+      "interpolate",
+      ["linear"],
+      ["get", "ZonalSt_CityCen1.MEDIAN"],
+      40, 0,
+      52, 300
+    ],
+    "fill-extrusion-opacity": 0.9
+  }
+      
     });
+});
+    // ---------------- TOOLBAR INITIALIZATION ----------------
+    // Map toolbar tools to the Mapbox layer IDs you want to toggle
+    // ⬇️ replace these with your real layer IDs
+    const TOOL_LAYERS = {
+      overview: ["3d-buildings"],                            // no extra layer
+      temperature: ["heat-hex", "heat-labels"],
+      transport: ["pt-lines", "pt-stops"],
+      energy: ["energy-buildings"],
+      mobility: ["traffic-flows"],
+      green: ["green-areas", "trees"],
+      water: ["water-pipes", "wells"],
+      emissions: ["co2-grid"]
+    };
+
+    // turn all tool layers off, then turn the ones for the active tool on
+    function setToolVisibility(toolId) {
+      const allToolLayerIds = [
+        ...new Set(Object.values(TOOL_LAYERS).flat())
+      ];
+
+      allToolLayerIds.forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, "visibility", "none");
+        }
+      });
+
+      (TOOL_LAYERS[toolId] || []).forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, "visibility", "visible");
+        }
+      });
+    }
 
     /* ---------------- UI BEHAVIOUR ---------------- */
     const toolbar = document.getElementById("toolbar");
@@ -722,6 +786,8 @@
         panelBody.innerHTML = content.body;
         sidePanel.classList.add("visible");
       }
+       // 🔁 toggle map layers based on the clicked tool
+      setToolVisibility(tool);
     });
 
     document
@@ -758,7 +824,7 @@
       );
 
     const initialView = {
-      center: [7.9, 51.96],
+      center: [6.8950, 52.2190],
       zoom: 13.2,
       pitch: 60,
       bearing: -35
