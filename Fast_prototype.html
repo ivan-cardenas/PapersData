@@ -645,6 +645,7 @@
           }
         }
 
+
         // ---------------- 3D BUILDINGS ----------------
         map.addLayer(
           {
@@ -691,33 +692,12 @@
           data: "./Assets/Green_Area.geojson",
         });
 
-        map.addLayer({
-          id: "heat-hex",
-          type: "fill-extrusion",
-          source: "heat-grid",
-          paint: {
-            "fill-extrusion-color": [
-              "interpolate",
-              ["linear"],
-              ["get", "ZonalSt_CityCen1.MEDIAN"],
-              41,
-              "#7bab45",
-              43,
-              "#ff4a4b",
-            ],
-            "fill-extrusion-height": [
-              "interpolate",
-              ["linear"],
-              ["get", "ZonalSt_CityCen1.MEDIAN"],
-              41,
-              0,
-              43,
-              200,
-            ],
-            "fill-extrusion-opacity": 0.9,
-          },
-          visible: false,
+        map.addSource("Water_Pipes", {
+          type: "geojson",
+          data: "./Assets/Pipes_Water_WGS84.geojson",
         });
+
+
 
         map.addLayer({
           id: "green-areas",
@@ -730,11 +710,83 @@
           visible: false,
         });
 
+       map.addLayer({
+         id: "water-pipes",
+         type: "line",
+         source: "Water_Pipes",
+         'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+         paint: {
+           "line-color": "#3db9d7",
+           "line-width": 2,
+           "line-elevation-reference": "ground",
+           "line-z-offset": -10
+           
+         },
+         visible: true,
+       })
+      
         map.addLayer({
-          id: 'trees',  
-          source: 'composite'
-        })
+          id: "heat-hex",
+          type: "fill-extrusion",
+          source: "heat-grid",
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "MEDIAN"],
+              41,
+              "#7bab45",
+              43,
+              "#ff4a4b",
+            ],
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["get", "MEDIAN"],
+              41,
+              0,
+              43,
+              200,
+            ],
+            "fill-extrusion-opacity": 0.9,
+          },
+          visible: false,
+        });
+
+      const popupLayers = ["heat-hex", "green-areas", "water-pipes"];
+
+      popupLayers.forEach(layer => {
+        map.on("click", layer, (e) => {
+          const f = e.features[0];
+
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(`
+              <h4>${f.layer.id}</h4>
+              <p style="color: #000000">${Object.entries(f.properties)
+                .map(([k,v]) => `<strong>${k}:</strong> ${v}`)
+                .join("<br>")}
+              </p>
+            `)
+            .addTo(map);
+        });
+
+        // Optional: change cursor on hover
+        map.on("mouseenter", layer, () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", layer, () => {
+          map.getCanvas().style.cursor = "";
+        });
       });
+      
+      });
+
+
+      
       // ---------------- TOOLBAR INITIALIZATION ----------------
       // Map toolbar tools to the Mapbox layer IDs you want to toggle
       // ⬇️ replace these with your real layer IDs
