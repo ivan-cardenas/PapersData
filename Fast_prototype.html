@@ -1,658 +1,811 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Urban Twin Prototype – Mapbox</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Mapbox GL -->
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Urban Twin Prototype – Mapbox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-      :root {
-        --accent: #ff9b37;
-        --accent-soft: rgba(255, 155, 55, 0.15);
-        --bg-panel: rgba(32, 32, 40, 0.92);
-        --bg-panel-soft: rgba(32, 32, 40, 0.75);
-        --bg-toolbar: rgba(245, 245, 248, 0.9);
-        --text-main: #fdfdfd;
-        --text-muted: #c7c7d3;
-        --map-border-radius: 18px;
-        --shadow-soft: 0 20px 35px rgba(0, 0, 0, 0.3);
-      }
+  <!-- Mapbox GL -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  <style>
+    :root {
+      --accent: #ff9b37;
+      --accent-soft: rgba(255, 155, 55, 0.15);
+      --bg-panel: rgba(32, 32, 40, 0.92);
+      --bg-panel-soft: rgba(32, 32, 40, 0.75);
+      --bg-toolbar: rgba(245, 245, 248, 0.9);
+      --text-main: #fdfdfd;
+      --text-muted: #c7c7d3;
+      --map-border-radius: 18px;
+      --shadow-soft: 0 20px 35px rgba(0, 0, 0, 0.3);
+    }
 
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        background: radial-gradient(circle at top, #262939 0, #111218 55%);
-        color: var(--text-main);
-        overflow: hidden;
-      }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      .app-shell {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
-        padding: 10px;
-      }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #262939 0, #111218 55%);
+      color: var(--text-main);
+      overflow: hidden;
+    }
 
-      .map-wrapper {
-        position: relative;
-        flex: 1;
-        border-radius: var(--map-border-radius);
-        overflow: hidden;
-        box-shadow: var(--shadow-soft);
-      }
+    .app-shell {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 10px;
+    }
 
-      #map {
-        position: absolute;
-        inset: 0;
-      }
+    .map-wrapper {
+      position: relative;
+      flex: 1;
+      border-radius: var(--map-border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
 
-      /* LEFT TOOLBAR */
-      .toolbar {
-        position: absolute;
-        top: 50%;
-        left: 16px;
-        transform: translateY(-50%);
-        width: 58px;
-        padding: 8px 6px;
-        background: var(--bg-toolbar);
-        border-radius: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        z-index: 10;
-        backdrop-filter: blur(10px);
-      }
+    #map {
+      position: absolute;
+      inset: 0;
+    }
 
-      .tool-button {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        border: none;
-        background: linear-gradient(145deg, #fefefe, #e3e6ef);
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        position: relative;
-        transition: transform 0.12s ease, box-shadow 0.12s ease,
-          background 0.12s ease;
-      }
+    /* LEFT TOOLBAR */
+    .toolbar {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      width: 58px;
+      padding: 8px 6px;
+      background: var(--bg-toolbar);
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
 
-      .tool-button span {
-        font-size: 20px;
-      }
+    .tool-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(145deg, #fefefe, #e3e6ef);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        background 0.12s ease;
+    }
 
-      .tool-button.active {
-        background: radial-gradient(circle at 30% 20%, #ffffff, #ffe0b2);
-        box-shadow: 0 0 0 2px rgba(255, 155, 55, 0.7),
-          0 8px 16px rgba(0, 0, 0, 0.36);
-        transform: translateY(-1px) scale(1.02);
-      }
+    .tool-button span {
+      font-size: 20px;
+    }
 
-      .tool-button:hover:not(.active) {
-        transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.18);
-      }
+    .tool-button.active {
+      background: radial-gradient(circle at 30% 20%, #ffffff, #ffe0b2);
+      box-shadow: 0 0 0 2px rgba(255, 155, 55, 0.7),
+        0 8px 16px rgba(0, 0, 0, 0.36);
+      transform: translateY(-1px) scale(1.02);
+    }
 
-      .tool-tooltip {
-        position: absolute;
-        left: 54px;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 4px 8px;
-        border-radius: 6px;
-        background: rgba(15, 16, 24, 0.9);
-        color: #f8f8ff;
-        font-size: 11px;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.15s ease;
-      }
+    .tool-button:hover:not(.active) {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.18);
+    }
 
-      .tool-button:hover .tool-tooltip {
-        opacity: 1;
-      }
+    .tool-tooltip {
+      position: absolute;
+      left: 54px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(15, 16, 24, 0.9);
+      color: #f8f8ff;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
 
-      /* BOTTOM BAR */
-      .bottom-bar {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 10px 18px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: linear-gradient(
-          to top,
+    .tool-button:hover .tool-tooltip {
+      opacity: 1;
+    }
+
+    /* BOTTOM BAR */
+    .bottom-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 18px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to top,
           rgba(12, 13, 18, 0.95),
           rgba(12, 13, 18, 0.85),
-          transparent
-        );
-        backdrop-filter: blur(16px);
-        color: var(--text-main);
-        z-index: 9;
+          transparent);
+      backdrop-filter: blur(16px);
+      color: var(--text-main);
+      z-index: 9;
+    }
+
+    .bottom-left,
+    .bottom-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .camera-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(21, 21, 30, 0.85);
+    }
+
+    .camera-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-btn:hover {
+      color: #ffffff;
+    }
+
+    .indicator-pill {
+      min-width: 125px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(24, 24, 34, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.12s ease, border 0.12s ease,
+        transform 0.12s ease;
+    }
+
+    .indicator-pill:hover {
+      background: rgba(35, 35, 47, 0.96);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .indicator-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #ffe0b2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c06000;
+      font-size: 16px;
+    }
+
+    .indicator-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .indicator-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .indicator-value {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .city-name {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(26, 26, 36, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .bottom-right .mode-btn {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(26, 26, 36, 0.8);
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bottom-right .mode-btn span {
+      font-size: 13px;
+    }
+
+    .bottom-right .mode-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* SIDE PANEL */
+    .side-panel {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 600px;
+      max-width: 80vw;
+      padding: 14px 16px 16px;
+      background: var(--bg-panel-soft);
+      border-radius: 16px;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      z-index: 11;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .side-panel.visible {
+      display: flex;
+    }
+
+    .side-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .side-panel-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .side-panel-close {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .side-panel-close:hover {
+      color: #fff;
+    }
+
+    .side-panel-body {
+      font-size: 13px;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    .side-panel-body p+p {
+      margin-top: 6px;
+    }
+
+    .side-panel-tagline {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 768px) {
+      .bottom-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
       }
 
       .bottom-left,
       .bottom-right {
-        display: flex;
-        align-items: center;
-        gap: 18px;
+        justify-content: space-between;
       }
 
-      .camera-tools {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
+      .toolbar {
+        top: 16px;
+        transform: none;
+        flex-direction: row;
+        height: auto;
+        width: auto;
         border-radius: 999px;
-        background: rgba(21, 21, 30, 0.85);
       }
 
-      .camera-btn {
-        border: none;
-        background: transparent;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-size: 18px;
-        padding: 4px 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .camera-btn:hover {
-        color: #ffffff;
-      }
-
-      .indicator-pill {
-        min-width: 125px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(24, 24, 34, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: background 0.12s ease, border 0.12s ease,
-          transform 0.12s ease;
-      }
-
-      .indicator-pill:hover {
-        background: rgba(35, 35, 47, 0.96);
-        border-color: rgba(255, 255, 255, 0.12);
-        transform: translateY(-1px);
-      }
-
-      .indicator-icon {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 30% 20%, #ffffff, #ffe0b2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #c06000;
-        font-size: 16px;
-      }
-
-      .indicator-meta {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-      }
-
-      .indicator-label {
-        font-size: 11px;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-
-      .indicator-value {
-        font-size: 13px;
-        font-weight: 600;
-      }
-
-      .city-name {
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        padding: 6px 12px;
-        border-radius: 999px;
-        background: rgba(26, 26, 36, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .bottom-right .mode-btn {
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(26, 26, 36, 0.8);
-        color: var(--text-muted);
-        font-size: 12px;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .bottom-right .mode-btn span {
-        font-size: 13px;
-      }
-
-      .bottom-right .mode-btn:hover {
-        color: #fff;
-        border-color: var(--accent);
-      }
-
-      /* SIDE PANEL */
-      .side-panel {
-        position: absolute;
-        right: 18px;
-        top: 18px;
-        width: 600px;
-        max-width: 80vw;
-        padding: 14px 16px 16px;
-        background: var(--bg-panel-soft);
-        border-radius: 16px;
-        box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(16px);
-        z-index: 11;
+      .tool-button .tool-tooltip {
         display: none;
-        flex-direction: column;
-        gap: 6px;
       }
 
-      .side-panel.visible {
-        display: flex;
+      .side-panel {
+        width: calc(100% - 32px);
       }
+    }
 
-      .side-panel-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-      }
+    /* --- DASHBOARD MOCKUP --------------------------------------------------- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
 
-      .side-panel-title {
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--text-muted);
-      }
+    .kpi-card {
+      background: rgba(12, 13, 20, 0.85);
+      border-radius: 10px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-      .side-panel-close {
-        border: none;
-        background: transparent;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-size: 18px;
-      }
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
 
-      .side-panel-close:hover {
-        color: #fff;
-      }
+    .kpi-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
 
-      .side-panel-body {
-        font-size: 13px;
-        color: var(--text-main);
-        margin-top: 4px;
-      }
+    .kpi-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
 
-      .side-panel-body p + p {
-        margin-top: 6px;
-      }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
 
-      .side-panel-tagline {
-        margin-top: 8px;
-        font-size: 11px;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
+    .mini-chart {
+      display: flex;
+      align-items: stretch;
+      gap: 3px;
+      margin-top: 4px;
+      height: 60px;
+    }
 
-      @media (max-width: 768px) {
-        .bottom-bar {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 10px;
-        }
-        .bottom-left,
-        .bottom-right {
-          justify-content: space-between;
-        }
-        .toolbar {
-          top: 16px;
-          transform: none;
-          flex-direction: row;
-          height: auto;
-          width: auto;
-          border-radius: 999px;
-        }
-        .tool-button .tool-tooltip {
-          display: none;
-        }
-        .side-panel {
-          width: calc(100% - 32px);
-        }
-      }
+    .mini-bar {
+      flex: 1;
+      border-radius: 99px 99px 0 0;
+      background: var(--accent-soft);
+      position: relative;
+      overflow: visible;
+      height: 100%;
+    }
 
-      /* --- DASHBOARD MOCKUP --------------------------------------------------- */
-      .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 6px;
-      }
+    .mini-bar::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      border-radius: 99px 99px 0 0;
+      background: var(--accent);
+      height: var(--h);
+    }
 
-      .kpi-card {
-        background: rgba(12, 13, 20, 0.85);
-        border-radius: 10px;
-        padding: 8px 10px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
 
-      .kpi-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--text-muted);
-      }
+    .dashboard-note {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
 
-      .kpi-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--accent);
-      }
 
-      .kpi-value {
-        font-size: 16px;
-        font-weight: 600;
-      }
+    .onboarding-hint {
+      position: absolute;
+      left: 90px;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 220px;
+      background: rgba(15, 16, 24, 0.95);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+      z-index: 20;
+    }
 
-      .kpi-sub {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
+    .onboarding-hint::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent rgba(15, 16, 24, 0.95) transparent transparent;
+    }
 
-      .mini-chart {
-        display: flex;
-        align-items: flex-end;
-        gap: 3px;
-        margin-top: 4px;
-        height: 34px;
-      }
+    .bottom-right {
+      position: relative;
+    }
 
-      .mini-bar {
-        flex: 1;
-        border-radius: 99px 99px 0 0;
-        background: var(--accent-soft);
-        position: relative;
-        overflow: hidden;
-      }
+    .bottom-helper {
+      position: absolute;
+      right: 0;
+      bottom: 54px;
+      width: 220px;
+      background: rgba(15, 16, 24, 0.95);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.35;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
 
-      .mini-bar::after {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        bottom: 0;
-        border-radius: 99px 99px 0 0;
-        background: var(--accent);
-      }
+    .bottom-helper::after {
+      content: "";
+      position: absolute;
+      right: 18px;
+      bottom: -7px;
+      border-width: 7px;
+      border-style: solid;
+      border-color: rgba(15, 16, 24, 0.95) transparent transparent transparent;
+    }
 
-      .mini-bar.h10::after {
-        height: 10%;
-      }
-      .mini-bar.h25::after {
-        height: 25%;
-      }
-      .mini-bar.h40::after {
-        height: 40%;
-      }
-      .mini-bar.h60::after {
-        height: 60%;
-      }
-      .mini-bar.h80::after {
-        height: 80%;
-      }
 
-      .dashboard-note {
-        margin-top: 8px;
-        font-size: 11px;
-        color: var(--text-muted);
-      }
+    /* --- GAUGES ------------------------------------------------------------- */
+    .gauge-card {
+      background: rgba(12, 13, 20, 0.85);
+      border-radius: 10px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-      /* --- GAUGES ------------------------------------------------------------- */
-      .gauge-card {
-        background: rgba(12, 13, 20, 0.85);
-        border-radius: 10px;
-        padding: 8px 10px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
+    .gauge-ring {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%,
+          #111319 0,
+          #111319 56%,
+          transparent 56%),
+        conic-gradient(var(--accent) 0 calc(var(--value) * 1%),
+          rgba(255, 255, 255, 0.06) calc(var(--value) * 1%) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-      .gauge-ring {
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle at 50% 50%,
-            #111319 0,
-            #111319 56%,
-            transparent 56%
-          ),
-          conic-gradient(
-            var(--accent) 0 calc(var(--value) * 1%),
-            rgba(255, 255, 255, 0.06) calc(var(--value) * 1%) 100%
-          );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+    .gauge-center {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+    }
 
-      .gauge-center {
-        font-size: 12px;
-        font-weight: 600;
-        color: #ffffff;
-      }
+    .gauge-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
 
-      .gauge-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
+    .gauge-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
 
-      .gauge-label {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--text-muted);
-      }
+    .gauge-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
 
-      .gauge-sub {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="app-shell">
-      <div class="map-wrapper">
-        <div id="map"></div>
+<body>
+  <div class="app-shell">
+    <div class="map-wrapper">
+      <div id="map"></div>
 
-        <!-- LEFT TOOLBAR -->
-        <div class="toolbar" id="toolbar">
-          <button class="tool-button active" data-tool="overview">
-            <span>🏠</span>
-            <div class="tool-tooltip">Overview</div>
-          </button>
-          <button class="tool-button" data-tool="temperature">
-            <span>🌡️</span>
-            <div class="tool-tooltip">Heat</div>
-          </button>
-          <!-- <button class="tool-button" data-tool="transport">
+      <!-- LEFT TOOLBAR -->
+      <div class="toolbar" id="toolbar">
+        <button class="tool-button active" data-tool="overview">
+          <span>🏠</span>
+          <div class="tool-tooltip">Overview</div>
+        </button>
+        <button class="tool-button" data-tool="temperature">
+          <span>🌡️</span>
+          <div class="tool-tooltip">Heat</div>
+        </button>
+        <!-- <button class="tool-button" data-tool="transport">
           <span>🚊</span>
           <div class="tool-tooltip">Mobility</div>
         </button> -->
-          <button class="tool-button" data-tool="energy">
+        <!-- <button class="tool-button" data-tool="energy">
             <span>⚡</span>
             <div class="tool-tooltip">Energy</div>
-          </button>
-          <!-- <button class="tool-button" data-tool="mobility">
+          </button> -->
+        <!-- <button class="tool-button" data-tool="mobility">
           <span>🚗</span>
           <div class="tool-tooltip">Traffic</div>
         </button> -->
-          <button class="tool-button" data-tool="green">
-            <span>🌳</span>
-            <div class="tool-tooltip">Green</div>
-          </button>
-          <button class="tool-button" data-tool="water">
-            <span>💧</span>
-            <div class="tool-tooltip">Water</div>
-          </button>
-          <button class="tool-button" data-tool="emissions">
+        <button class="tool-button" data-tool="green">
+          <span>🌳</span>
+          <div class="tool-tooltip">Green</div>
+        </button>
+        <button class="tool-button" data-tool="water">
+          <span>💧</span>
+          <div class="tool-tooltip">Water</div>
+        </button>
+        <!-- <button class="tool-button" data-tool="emissions">
             <span>🧪</span>
-            <div class="tool-tooltip">CO₂</div>
+            <div class="tool-tooltip">CO₂</div> -->
+        </button>
+        <button class="tool-button" data-tool="satellite">
+          <span>🛰️</span>
+          <div class="tool-tooltip">Satellite</div>
+        </button>
+      </div>
+
+      <div class="onboarding-hint" id="onboarding-hint">
+        <strong>Start here</strong>
+        <p>
+          Use the icons on the left to explore heat, water, green areas and emissions.
+          Click indicators below for details.
+        </p>
+      </div>
+
+      <!-- SIDE PANEL -->
+      <div class="side-panel" id="side-panel">
+        <div class="side-panel-header">
+          <div class="side-panel-title" id="panel-title">OVERVIEW</div>
+          <button class="side-panel-close" id="panel-close">✕</button>
+        </div>
+        <div class="side-panel-body" id="panel-body">
+          <p>
+            Use the tool icons on the left to switch between layers such as
+            heat, water, emissions, or mobility.
+          </p>
+          <p>
+            This panel is where you can show KPIs, charts, legends, or
+            scenario settings for the active layer.
+          </p>
+        </div>
+        <div class="side-panel-tagline">
+          URBAN DIGITAL TWIN · INTERACTIVE PROTOTYPE
+        </div>
+      </div>
+
+      <!-- BOTTOM BAR -->
+      <div class="bottom-bar">
+        <div class="bottom-left">
+          <div class="camera-tools">
+            <button class="camera-btn" id="btn-tilt">⤢</button>
+            <button class="camera-btn" id="btn-reset">⟳</button>
+          </div>
+
+          <div class="indicator-pill" data-indicator="population">
+            <div class="indicator-icon">👥</div>
+            <div class="indicator-meta">
+              <span class="indicator-label">Population</span>
+              <span class="indicator-value" id="pop-value">125,600</span>
+            </div>
+          </div>
+
+          <div class="indicator-pill" data-indicator="housing">
+            <div class="indicator-icon">🏠</div>
+            <div class="indicator-meta">
+              <span class="indicator-label">Housing Units</span>
+              <span class="indicator-value" id="house-value">59,800</span>
+            </div>
+          </div>
+
+          <div class="indicator-pill" data-indicator="jobs">
+            <div class="indicator-icon">🏬</div>
+            <div class="indicator-meta">
+              <span class="indicator-label">Jobs</span>
+              <span class="indicator-value" id="jobs-value">4,500</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="city-name">City Name</div>
+
+        <div class="bottom-right">
+          <button class="mode-btn" id="btn-dashboard">
+            <span>📊</span> Dashboard
           </button>
-        </div>
-
-        <!-- SIDE PANEL -->
-        <div class="side-panel" id="side-panel">
-          <div class="side-panel-header">
-            <div class="side-panel-title" id="panel-title">OVERVIEW</div>
-            <button class="side-panel-close" id="panel-close">✕</button>
-          </div>
-          <div class="side-panel-body" id="panel-body">
-            <p>
-              Use the tool icons on the left to switch between layers such as
-              heat, water, emissions, or mobility.
-            </p>
-            <p>
-              This panel is where you can show KPIs, charts, legends, or
-              scenario settings for the active layer.
-            </p>
-          </div>
-          <div class="side-panel-tagline">
-            URBAN DIGITAL TWIN · INTERACTIVE PROTOTYPE
-          </div>
-        </div>
-
-        <!-- BOTTOM BAR -->
-        <div class="bottom-bar">
-          <div class="bottom-left">
-            <div class="camera-tools">
-              <button class="camera-btn" id="btn-tilt">⤢</button>
-              <button class="camera-btn" id="btn-reset">⟳</button>
-            </div>
-
-            <div class="indicator-pill" data-indicator="population">
-              <div class="indicator-icon">👥</div>
-              <div class="indicator-meta">
-                <span class="indicator-label">Population</span>
-                <span class="indicator-value" id="pop-value">125,600</span>
-              </div>
-            </div>
-
-            <div class="indicator-pill" data-indicator="housing">
-              <div class="indicator-icon">🏠</div>
-              <div class="indicator-meta">
-                <span class="indicator-label">Housing Units</span>
-                <span class="indicator-value" id="house-value">59,800</span>
-              </div>
-            </div>
-
-            <div class="indicator-pill" data-indicator="jobs">
-              <div class="indicator-icon">🏬</div>
-              <div class="indicator-meta">
-                <span class="indicator-label">Jobs</span>
-                <span class="indicator-value" id="jobs-value">4,500</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="city-name">City Name</div>
-
-          <div class="bottom-right">
-            <button class="mode-btn" id="btn-dashboard">
-              <span>📊</span> Dashboard
-            </button>
-            <button class="mode-btn" id="btn-scenarios">
-              <span>🧩</span> Scenarios
-            </button>
-          </div>
+          <button class="mode-btn" id="btn-scenarios">
+            <span>🧩</span> Scenarios
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      /* ---------------- MAPBOX INITIALIZATION ---------------- */
-      mapboxgl.accessToken =
-        "pk.eyJ1IjoiY3lnbnVzMjYiLCJhIjoiY2s5Z2MzeWVvMGx3NTNtbzRnbGtsOXl6biJ9.8SLdJuFQzuN-s4OlHbwzLg";
+  <div class="bottom-helper" id="bottom-helper">
+    <strong>Next step</strong><br />
+    Try <b>Dashboard</b> for KPIs or <b>Scenarios</b> to explore futures.
+  </div>
 
-      const map = new mapboxgl.Map({
-        container: "map",
-        style: "mapbox://styles/mapbox/light-v11",
-        center: [6.895, 52.219], // pick whatever matches your area
-        zoom: 16,
-        pitch: 60,
-        bearing: -35,
-      });
+  <script>
+    /* ---------------- MAPBOX INITIALIZATION ---------------- */
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiY3lnbnVzMjYiLCJhIjoiY2s5Z2MzeWVvMGx3NTNtbzRnbGtsOXl6biJ9.8SLdJuFQzuN-s4OlHbwzLg";
 
-      map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    const BASEMAPS = {
+      light: "mapbox://styles/mapbox/light-v11",
+      satellite: "mapbox://styles/mapbox/satellite-streets-v12",
+    };
 
-      map.on("load", () => {
-        // 3D buildings (Mapbox standard example)
-        const layers = map.getStyle().layers;
-        let labelLayerId;
-        for (const layer of layers) {
-          if (layer.type === "symbol" && layer.layout["text-field"]) {
-            labelLayerId = layer.id;
-            break;
-          }
+    let activeBasemap = "light";
+
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: BASEMAPS[activeBasemap],
+      center: [6.895, 52.219], // pick whatever matches your area
+      zoom: 16,
+      pitch: 60,
+      bearing: -35,
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+    function restoreCustomLayers() {
+      // 3D buildings (Mapbox standard example)
+      const layers = map.getStyle().layers;
+      let labelLayerId;
+      for (const layer of layers) {
+        if (layer.type === "symbol" && layer.layout["text-field"]) {
+          labelLayerId = layer.id;
+          break;
         }
+      }
 
+      // ---------------- HEAT LAYERS ----------------
+      if (!map.getSource("heat-grid")) {
+        map.addSource("heat-grid", {
+          type: "geojson",
+          data: "./Assets/Heat_Enschede.json",
+        });
+      }
 
-        // ---------------- 3D BUILDINGS ----------------
+      if (!map.getLayer("heat-hex")) {
+        map.addSource("green-areas", {
+          type: "geojson",
+          data: "./Assets/Green_area.geojson",
+        });
+      }
+
+      if (!map.getLayer("Water_Pipes")) {
+        map.addSource("Water_Pipes", {
+          type: "geojson",
+          data: "./Assets/Pipes_Water_WGS84.geojson",
+        });
+      }
+
+      if (!map.getLayer("green-areas")) {
+        map.addLayer({
+          id: "green-areas",
+          type: "fill",
+          source: "green-areas",
+          paint: {
+            "fill-color": "#7bab45",
+            "fill-opacity": 0.5,
+            "fill-sort-key": 0,
+            "fill-z-offset": 0
+          },
+          visible: false,
+        });
+      }
+
+      if (!map.getLayer("water-pipes")) {
+        map.addLayer({
+          id: "water-pipes",
+          type: "line",
+          source: "Water_Pipes",
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            "line-color": "#3db9d7",
+            "line-width": 2,
+            "line-elevation-reference": "ground",
+            "line-z-offset": -10
+
+          },
+          visible: true,
+        })
+
+      }
+
+      if (!map.getLayer("heat-hex")) {
+        map.addLayer({
+          id: "heat-hex",
+          type: "fill-extrusion",
+          source: "heat-grid",
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "MEDIAN"],
+              41,
+              "#7bab45",
+              43,
+              "#ff1f21",
+            ],
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["get", "MEDIAN"],
+              41,
+              0,
+              43,
+              300,
+            ],
+            "fill-extrusion-opacity": 0.9,
+          },
+          visible: false,
+        });
+      }
+
+      // ---------------- 3D BUILDINGS ----------------
+      if (!map.getLayer("3d-buildings")) {
         map.addLayer(
           {
             id: "3d-buildings",
             source: "composite",
             "source-layer": "building",
-            filter: ["==", "extrude", "true"],
+            filter: ["==", ["get", "extrude"], "true"],
             type: "fill-extrusion",
             minzoom: 13,
             paint: {
@@ -676,305 +829,262 @@
                 ["get", "min_height"],
               ],
               "fill-extrusion-opacity": 0.8,
+              "fill-extrusion-cast-shadows": true,
+              "fill-extrusion-ambient-occlusion-intensity": 0.8,
+              "fill-extrusion-base-alignment": "terrain",
             },
           },
           labelLayerId
         );
-
-        // ---------------- HEAT LAYERS ----------------
-        map.addSource("heat-grid", {
-          type: "geojson",
-          data: "./Assets/Heat_Enschede.json",
-        });
-
-        map.addSource("green-areas", {
-          type: "geojson",
-          data: "./Assets/Green_Area.geojson",
-        });
-
-        map.addSource("Water_Pipes", {
-          type: "geojson",
-          data: "./Assets/Pipes_Water_WGS84.geojson",
-        });
-
-
-
-        map.addLayer({
-          id: "green-areas",
-          type: "fill",
-          source: "green-areas",
-          paint: {
-            "fill-color": "#7bab45",
-            "fill-opacity": 0.9,
-          },
-          visible: false,
-        });
-
-       map.addLayer({
-         id: "water-pipes",
-         type: "line",
-         source: "Water_Pipes",
-         'layout': {
-                'line-join': 'round',
-                'line-cap': 'round'
-            },
-         paint: {
-           "line-color": "#3db9d7",
-           "line-width": 2,
-           "line-elevation-reference": "ground",
-           "line-z-offset": -10
-           
-         },
-         visible: true,
-       })
-      
-        map.addLayer({
-          id: "heat-hex",
-          type: "fill-extrusion",
-          source: "heat-grid",
-          paint: {
-            "fill-extrusion-color": [
-              "interpolate",
-              ["linear"],
-              ["get", "MEDIAN"],
-              41,
-              "#7bab45",
-              43,
-              "#ff4a4b",
-            ],
-            "fill-extrusion-height": [
-              "interpolate",
-              ["linear"],
-              ["get", "MEDIAN"],
-              41,
-              0,
-              43,
-              200,
-            ],
-            "fill-extrusion-opacity": 0.9,
-          },
-          visible: false,
-        });
-
-      const popupLayers = ["heat-hex", "green-areas", "water-pipes"];
-
-      popupLayers.forEach(layer => {
-        map.on("click", layer, (e) => {
-          const f = e.features[0];
-
-          new mapboxgl.Popup()
-            .setLngLat(e.lngLat)
-            .setHTML(`
-              <h4>${f.layer.id}</h4>
-              <p style="color: #000000">${Object.entries(f.properties)
-                .map(([k,v]) => `<strong>${k}:</strong> ${v}`)
-                .join("<br>")}
-              </p>
-            `)
-            .addTo(map);
-        });
-
-        // Optional: change cursor on hover
-        map.on("mouseenter", layer, () => {
-          map.getCanvas().style.cursor = "pointer";
-        });
-        map.on("mouseleave", layer, () => {
-          map.getCanvas().style.cursor = "";
-        });
-      });
-      
-      });
-
-
-      
-      // ---------------- TOOLBAR INITIALIZATION ----------------
-      // Map toolbar tools to the Mapbox layer IDs you want to toggle
-      // ⬇️ replace these with your real layer IDs
-      const TOOL_LAYERS = {
-        overview: ["3d-buildings"], // no extra layer
-        temperature: ["heat-hex", "heat-labels"],
-        transport: ["pt-lines", "pt-stops"],
-        energy: ["energy-buildings"],
-        mobility: ["traffic-flows"],
-        green: ["green-areas", "trees"],
-        water: ["water-pipes", "wells"],
-        emissions: ["co2-grid"],
-      };
-
-      // turn all tool layers off, then turn the ones for the active tool on
-      function setToolVisibility(toolId) {
-        const allToolLayerIds = [...new Set(Object.values(TOOL_LAYERS).flat())];
-
-        allToolLayerIds.forEach((layerId) => {
-          if (map.getLayer(layerId)) {
-            map.setLayoutProperty(layerId, "visibility", "none");
-          }
-        });
-
-        (TOOL_LAYERS[toolId] || []).forEach((layerId) => {
-          if (map.getLayer(layerId)) {
-            map.setLayoutProperty(layerId, "visibility", "visible");
-          }
-        });
       }
 
-      /* ---------------- UI BEHAVIOUR ---------------- */
-      const toolbar = document.getElementById("toolbar");
-      const sidePanel = document.getElementById("side-panel");
-      const panelTitle = document.getElementById("panel-title");
-      const panelBody = document.getElementById("panel-body");
+    }
+    const popupLayers = ["heat-hex", "green-areas", "water-pipes"];
 
-      const TOOL_CONTENT = {
-        overview: {
-          title: "OVERVIEW",
-          body: `
+    popupLayers.forEach(layer => {
+      map.on("click", layer, (e) => {
+        const f = e.features[0];
+
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(`
+              <h4>${f.layer.id}</h4>
+              <p style="color: #000000">${Object.entries(f.properties)
+              .map(([k, v]) => `<strong>${k}:</strong> ${v}`)
+              .join("<br>")}
+              </p>
+            `)
+          .addTo(map);
+      });
+
+      // Optional: change cursor on hover
+      map.on("mouseenter", layer, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", layer, () => {
+        map.getCanvas().style.cursor = "";
+      });
+    });
+
+    map.on("load", () => {
+      restoreCustomLayers();
+    });
+
+
+
+    // ---------------- TOOLBAR INITIALIZATION ----------------
+    // Map toolbar tools to the Mapbox layer IDs you want to toggle
+    // ⬇️ replace these with your real layer IDs
+    const TOOL_LAYERS = {
+      overview: ["3d-buildings"], // no extra layer
+      temperature: ["heat-hex", "heat-labels"],
+      transport: ["pt-lines", "pt-stops"],
+      energy: ["energy-buildings"],
+      mobility: ["traffic-flows"],
+      green: ["green-areas", "trees"],
+      water: ["water-pipes", "wells"],
+      emissions: ["co2-grid"],
+      satellite: [],
+    };
+
+    // turn all tool layers off, then turn the ones for the active tool on
+    function setToolVisibility(toolId) {
+      const allToolLayerIds = [...new Set(Object.values(TOOL_LAYERS).flat())];
+
+      allToolLayerIds.forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, "visibility", "none");
+        }
+      });
+
+      (TOOL_LAYERS[toolId] || []).forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, "visibility", "visible");
+        }
+      });
+    }
+
+
+
+
+    /* ---------------- UI BEHAVIOUR ---------------- */
+    const toolbar = document.getElementById("toolbar");
+    const sidePanel = document.getElementById("side-panel");
+    const panelTitle = document.getElementById("panel-title");
+    const panelBody = document.getElementById("panel-body");
+
+    const TOOL_CONTENT = {
+      overview: {
+        title: "OVERVIEW",
+        body: `
           <p>Global overview of CITY. Use camera tools to explore the
           3D city and select indicators at the bottom to inspect population,
           housing and jobs.</p>
           <p>Switch to any thematic layer on the left to see more detailed
           information here.</p>
         `,
-        },
-        temperature: {
-          title: "URBAN HEAT",
-          body: `
+      },
+      temperature: {
+        title: "URBAN HEAT",
+        body: `
           <p>Visualize heat stress hotspots by overlaying land surface
           temperature and tree canopy coverage.</p>
           <p>Use this panel for metrics like average heat index, exposed
           population and priority cooling areas.</p>
         `,
-        },
-        transport: {
-          title: "PUBLIC TRANSPORT",
-          body: `
+      },
+      transport: {
+        title: "PUBLIC TRANSPORT",
+        body: `
           <p>Show tram and bus corridors, stop accessibility and potential
           transit-oriented development zones.</p>
         `,
-        },
-        energy: {
-          title: "ENERGY DEMAND / SUPPLY",
-          body: `
+      },
+      energy: {
+        title: "ENERGY DEMAND / SUPPLY",
+        body: `
           <p>Overlay building energy demand and local renewable production to
           detect deficits.</p>
         `,
-        },
-        mobility: {
-          title: "TRAFFIC & FLOWS",
-          body: `
+      },
+      mobility: {
+        title: "TRAFFIC & FLOWS",
+        body: `
           <p>Inspect traffic volumes, speeds and active mobility corridors to
           evaluate street network performance.</p>
         `,
-        },
-        green: {
-          title: "GREEN / BLUE INFRASTRUCTURE",
-          body: `
+      },
+      green: {
+        title: "GREEN / BLUE INFRASTRUCTURE",
+        body: `
           <p>View parks, trees and water bodies. Combine with heat and
           health indicators to locate greening priorities.</p>
         `,
-        },
-        water: {
-          title: "DRINKING WATER",
-          body: `
+      },
+      water: {
+        title: "DRINKING WATER",
+        body: `
           <p>Show wells, pipes and consumption indicators. Relate demand to
           housing and population forecasts.</p>
         `,
-        },
-        emissions: {
-          title: "EMISSIONS",
-          body: `
+      },
+      emissions: {
+        title: "EMISSIONS",
+        body: `
           <p>Visualize sector-based CO₂ emissions and compare scenarios such
           as business-as-usual vs. mitigation.</p>
         `,
-        },
-      };
+      },
+    };
 
-      toolbar.addEventListener("click", (evt) => {
-        const btn = evt.target.closest(".tool-button");
-        if (!btn) return;
+    toolbar.addEventListener("click", (evt) => {
+      const btn = evt.target.closest(".tool-button");
+      if (!btn) return;
 
-        const tool = btn.dataset.tool;
-        toolbar
-          .querySelectorAll(".tool-button")
-          .forEach((b) => b.classList.toggle("active", b === btn));
+      const tool = btn.dataset.tool;
+      toolbar
+        .querySelectorAll(".tool-button")
+        .forEach((b) => b.classList.toggle("active", b === btn));
 
-        const content = TOOL_CONTENT[tool];
-        if (content) {
-          panelTitle.textContent = content.title;
-          panelBody.innerHTML = content.body;
-          sidePanel.classList.add("visible");
+      // 🛰️ SWITCH BASEMAP
+      if (tool === "satellite") {
+        setBasemap("satellite");
+      } else {
+        setBasemap("light");
+      }
+
+      const content = TOOL_CONTENT[tool];
+      if (content) {
+        panelTitle.textContent = content.title;
+        panelBody.innerHTML = content.body;
+        sidePanel.classList.add("visible");
+      }
+      // 🔁 toggle map layers based on the clicked tool
+      setToolVisibility(tool);
+    });
+
+    document
+      .getElementById("panel-close")
+      .addEventListener("click", () => sidePanel.classList.remove("visible"));
+
+    document.querySelectorAll(".indicator-pill").forEach((pill) =>
+      pill.addEventListener("click", () => {
+        const type = pill.dataset.indicator;
+        let title = "INDICATOR";
+        let body = "";
+
+        if (type === "population") {
+          title = "POPULATION";
+          body = "<p>Population aligned with current camera extent</p>";
+        } else if (type === "housing") {
+          title = "HOUSING UNITS";
+          body =
+            "<p>Number of residential units inside the viewport. Use this " +
+            "to compare zoning or scenario options.</p>";
+        } else if (type === "jobs") {
+          title = "JOBS";
+          body = "<p>Estimate of jobs within the current view. </p>";
         }
-        // 🔁 toggle map layers based on the clicked tool
-        setToolVisibility(tool);
+
+        panelTitle.textContent = title;
+        panelBody.innerHTML = body;
+        sidePanel.classList.add("visible");
+      })
+    );
+
+    const initialView = {
+      center: [6.895, 52.219],
+      zoom: 13.2,
+      pitch: 60,
+      bearing: -35,
+    };
+
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      map.easeTo({
+        center: initialView.center,
+        zoom: initialView.zoom,
+        pitch: initialView.pitch,
+        bearing: initialView.bearing,
+        duration: 800,
       });
+    });
 
-      document
-        .getElementById("panel-close")
-        .addEventListener("click", () => sidePanel.classList.remove("visible"));
-
-      document.querySelectorAll(".indicator-pill").forEach((pill) =>
-        pill.addEventListener("click", () => {
-          const type = pill.dataset.indicator;
-          let title = "INDICATOR";
-          let body = "";
-
-          if (type === "population") {
-            title = "POPULATION";
-            body = "<p>Population aligned with current camera extent</p>";
-          } else if (type === "housing") {
-            title = "HOUSING UNITS";
-            body =
-              "<p>Number of residential units inside the viewport. Use this " +
-              "to compare zoning or scenario options.</p>";
-          } else if (type === "jobs") {
-            title = "JOBS";
-            body = "<p>Estimate of jobs within the current view. </p>";
-          }
-
-          panelTitle.textContent = title;
-          panelBody.innerHTML = body;
-          sidePanel.classList.add("visible");
-        })
-      );
-
-      const initialView = {
-        center: [6.895, 52.219],
-        zoom: 13.2,
-        pitch: 60,
-        bearing: -35,
-      };
-
-      document.getElementById("btn-reset").addEventListener("click", () => {
-        map.easeTo({
-          center: initialView.center,
-          zoom: initialView.zoom,
-          pitch: initialView.pitch,
-          bearing: initialView.bearing,
-          duration: 800,
-        });
+    let tilted = true;
+    document.getElementById("btn-tilt").addEventListener("click", () => {
+      tilted = !tilted;
+      map.easeTo({
+        pitch: tilted ? 60 : 0,
+        duration: 600,
       });
+    });
 
-      let tilted = true;
-      document.getElementById("btn-tilt").addEventListener("click", () => {
-        tilted = !tilted;
-        map.easeTo({
-          pitch: tilted ? 60 : 0,
-          duration: 600,
-        });
-      });
+    const hint = document.getElementById("onboarding-hint");
 
-      document.getElementById("btn-dashboard").addEventListener("click", () => {
-        // mock energy demand data (kWh/m² per month)
-        const monthlyDemand = [
-          120, 132, 140, 152, 168, 182, 190, 188, 176, 160, 145, 130,
-        ];
-        const avgDemand =
-          monthlyDemand.reduce((sum, v) => sum + v, 0) / monthlyDemand.length;
-        const minDemand = Math.min(...monthlyDemand);
-        const maxDemand = Math.max(...monthlyDemand);
+    toolbar.addEventListener("click", () => {
+      if (hint) hint.remove();
+    });
 
-        panelTitle.textContent = "CITY DASHBOARD";
+    document.getElementById("btn-dashboard").addEventListener("click", () => {
+      // mock energy demand data (kWh/m² per month)
+      const monthlyDemand = [
+        120, 132, 140, 152, 168, 182, 190, 188, 176, 160, 145, 130,
+      ];
+      const avgDemand =
+        monthlyDemand.reduce((sum, v) => sum + v, 0) / monthlyDemand.length;
+      const minDemand = Math.min(...monthlyDemand);
+      const maxDemand = Math.max(...monthlyDemand);
 
-        panelBody.innerHTML = `
+      panelTitle.textContent = "CITY DASHBOARD";
+
+
+      const barsHTML = monthlyDemand.map(v => {
+        const h = Math.round((v / maxDemand) * 100);
+        return `<div class="mini-bar" style="--h:${h}%"></div>`;
+      }).join("");
+
+
+
+      panelBody.innerHTML = `
       <div class="dashboard-grid">
         <div class="kpi-card">
           <div class="kpi-header">
@@ -1022,12 +1132,7 @@
           <span class="kpi-dot"></span>
         </div>
         <div class="mini-chart">
-          <div class="mini-bar h25"></div>
-          <div class="mini-bar h40"></div>
-          <div class="mini-bar h60"></div>
-          <div class="mini-bar h80"></div>
-          <div class="mini-bar h60"></div>
-          <div class="mini-bar h40"></div>
+         ${barsHTML}
         </div>
         <div class="kpi-sub" style="margin-top:4px;">
           Monthly demand (kWh/m²): ${monthlyDemand.join(" · ")}<br>
@@ -1040,12 +1145,13 @@
       </p>
     `;
 
-        sidePanel.classList.add("visible");
-      });
 
-      document.getElementById("btn-scenarios").addEventListener("click", () => {
-        panelTitle.textContent = "SCENARIO MANAGER";
-        panelBody.innerHTML = `
+      sidePanel.classList.add("visible");
+    });
+
+    document.getElementById("btn-scenarios").addEventListener("click", () => {
+      panelTitle.textContent = "SCENARIO MANAGER";
+      panelBody.innerHTML = `
           <div class="scenario-grid">
            <div class="indicator-pill" data-indicator="Scenario">
             <div class="indicator-icon">'30</div>
@@ -1065,8 +1171,31 @@
          
            <p>Here you could switch between baseline, 2030 and 2050 scenarios.</p>
           `;
-        sidePanel.classList.add("visible");
+      sidePanel.classList.add("visible");
+    });
+
+    function setBasemap(basemapKey) {
+      if (!BASEMAPS[basemapKey]) return;
+      if (activeBasemap === basemapKey) return;
+
+      activeBasemap = basemapKey;
+      map.setStyle(BASEMAPS[activeBasemap]);
+
+      // Re-add custom layers after style reload
+      map.once("style.load", () => {
+        restoreCustomLayers();
       });
-    </script>
-  </body>
+    }
+
+    const bottomHelper = document.getElementById("bottom-helper");
+    function hideBottomHelper() {
+      if (bottomHelper) bottomHelper.remove();
+    }
+
+    document.getElementById("btn-dashboard").addEventListener("click", hideBottomHelper);
+    document.getElementById("btn-scenarios").addEventListener("click", hideBottomHelper);
+
+  </script>
+</body>
+
 </html>
