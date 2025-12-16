@@ -545,3 +545,21 @@
 
     document.getElementById("btn-dashboard").addEventListener("click", hideBottomHelper);
     document.getElementById("btn-scenarios").addEventListener("click", hideBottomHelper);
+
+
+   function toggleGroundwaterLayer() {
+  const layerId = "groundwater-level";
+  const legendEl = document.getElementById("legend-groundwater");
+
+  const visibility = map.getLayoutProperty(layerId, "visibility");
+
+  if (visibility === "visible") {
+    map.setLayoutProperty(layerId, "visibility", "none");
+    legendEl.style.display = "none";
+  } else {
+    map.setLayoutProperty(layerId, "visibility", "visible");
+    legendEl.style.display = "block";
+  }
+}
+
+document.getElementById("legend-groundwater").style.display = "none";

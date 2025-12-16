@@ -497,6 +497,28 @@
       border-color: rgba(15, 16, 24, 0.95) transparent transparent transparent;
     }
 
+    /* --- MAP LEGEND --------------------------------------------------------- */
+    .map-legend{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  z-index:2;
+  background:rgba(0,0,0,0.75);
+  color:#fff;
+  padding:10px;
+  border-radius:10px;
+  font:12px/1.2 system-ui, sans-serif;
+}
+.map-legend .legend-title{ font-weight:600; margin-bottom:8px; }
+.map-legend img{
+  display:block;
+  max-width:220px;
+  height:auto;
+  background:#fff;
+  border-radius:6px;
+}
+
+
 
     /* --- GAUGES ------------------------------------------------------------- */
     .gauge-card {
@@ -587,7 +609,7 @@
           <div class="tool-tooltip">Water supply</div>
         </button>
 
-          <button class="tool-button" data-tool="groundwater">
+          <button class="tool-button" data-tool="groundwater" onclick="toggleGroundwaterLayer()">
           <span>🚰</span>
           <div class="tool-tooltip">Groundwater Level</div>
         </button>
@@ -629,6 +651,16 @@
           URBAN DIGITAL TWIN · INTERACTIVE PROTOTYPE
         </div>
       </div>
+
+
+      <div id="legend-groundwater" class="map-legend">
+  <div class="legend-title">Groundwater (GHG)</div>
+  <img
+    id="legend-img"
+    src="https://service.pdok.nl/bzk/bro-grondwaterspiegeldiepte/wms/v2_0/legend/bro-grondwaterspiegeldieptemetingen-GHG/mediaan.png"
+    alt="GHG legend"
+  />
+</div>
 
       <!-- BOTTOM BAR -->
       <div class="bottom-bar">
