@@ -1,29 +1,30 @@
 :root {
-  --brand-primary: #2b76cc;
-  --brand-secondary: #040b22;
-  --accent: #e34a42;
-  --highlight: #ffcd00;
-  --hover: #3baee7;
-  --text: #333333;
-  --muted: #6b7280;
-  --bg: #f4f4f4;
-  --card: #ffffff;
-  --card-border: rgba(0, 0, 0, 0.08);
+  --brand-primary: #dbece2;
+  --brand-secondary: #121316;
+  --accent: #00d4aa;
+  --highlight: #757575;
+  --hover: #04856b;
+  --text: #e0e0e0;
+  --muted: #888888;
+  --bg: #0a0a0a;
+  --card: hsla(0, 0%, 8%, 0.986);
+  --card-border: #a7a1a1;
   --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Dark mode: keep brand hues, shift neutrals */
-[data-theme="dark"] {
+/* [data-theme="dark"] {
   --text: #e5e7eb;
   --muted: #9ca3af;
   --bg: #0b1115;
   --card: #0f1820;
   --card-border: rgba(255, 255, 255, 0.08);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
+} */
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 * {
   box-sizing: border-box;
@@ -33,17 +34,7 @@ body {
   margin: 0;
   padding: 0;
   font-family:
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Ubuntu,
-    Cantarell,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    "Liberation Sans",
-    sans-serif;
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
@@ -71,7 +62,7 @@ body {
   background: var(--highlight);
   color: #111;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: 0.2rem;
 }
 
 /* Nav */
@@ -147,8 +138,8 @@ header {
   text-align: center;
   padding: clamp(2rem, 3vw, 3rem) 1rem;
   background:
-    radial-gradient(1200px 500px at 10% -20%, #cef5d3 10%, transparent 70%),
-    radial-gradient(800px 600px at 90% -30%, #07e7a4 5%, transparent 65%),
+    radial-gradient(1200px 500px at 10% -20%, #497749 10%, transparent 70%),
+    radial-gradient(800px 600px at 90% -30%, #011f10 5%, transparent 65%),
     linear-gradient(135deg, var(--brand-primary), #4c5053);
 }
 header .hero {
@@ -237,12 +228,13 @@ main {
 section.card {
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-radius: 14px;
+  border-radius: 7px;
   box-shadow: var(--shadow);
   padding: clamp(1rem, 1.2vw, 1.3rem);
+  border: var(--card-border);
 }
 section.card h2 {
-  color: var(--brand-primary);
+  color: var(--accent);
   margin: 0.2rem 0 1rem;
   font-size: clamp(1.3rem, 1.8vw, 1.6rem);
 }
@@ -286,7 +278,7 @@ p {
 a {
   color: var(--accent);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 400;
 }
 a:hover {
   text-decoration: underline;
@@ -491,7 +483,7 @@ footer {
   content: "▸";
   font-size: 0.9rem;
   line-height: 1;
-  color: var(--accent);
+  /* color: var(--accent); */
 }
 .data-list li:hover {
   background: rgba(0, 0, 0, 0.04);
@@ -503,7 +495,7 @@ footer {
 .data-list a {
   text-decoration: none;
   font-weight: 700;
-  color: var(--accent);
+  /* color: var(--accent); */
 }
 [data-theme="dark"] .data-list a {
   color: var(--hover);
