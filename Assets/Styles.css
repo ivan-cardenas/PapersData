@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 :root {
   --brand-primary: #dbece2;
   --brand-secondary: #121316;
@@ -26,6 +28,8 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   font-family:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+
 }
 * {
   box-sizing: border-box;
@@ -102,7 +106,7 @@ nav {
   align-items: center;
 }
 .nav-links a {
-  color: #f0f0f0;
+  color: var(--muted);
   text-decoration: none;
   font-weight: 600;
   padding: 0.5rem 0.9rem;
@@ -137,10 +141,7 @@ header {
   color: #fff;
   text-align: center;
   padding: clamp(2rem, 3vw, 3rem) 1rem;
-  background:
-    radial-gradient(1200px 500px at 10% -20%, #497749 10%, transparent 70%),
-    radial-gradient(800px 600px at 90% -30%, #011f10 5%, transparent 65%),
-    linear-gradient(135deg, var(--brand-primary), #4c5053);
+  background: var(--brand-secondary)
 }
 header .hero {
   max-width: 1100px;
@@ -151,14 +152,15 @@ header h1 {
   font-size: clamp(1.75rem, 2.5vw, 2.6rem);
   font-weight: 800;
   letter-spacing: 0.2px;
+  color: var(--accent);
 }
 header h3 {
   margin: 0.25rem 0;
   font-weight: 600;
-  color: #d9eef6;
+  color: var(--brand-primary)
 }
 header .affil {
-  color: #c4e6ef;
+  color: var(--muted);
   font-size: 0.95rem;
   max-width: 900px;
   margin: 0.35rem auto 0;
@@ -234,7 +236,7 @@ section.card {
   border: var(--card-border);
 }
 section.card h2 {
-  color: var(--accent);
+  color: var(--brand-primary);
   margin: 0.2rem 0 1rem;
   font-size: clamp(1.3rem, 1.8vw, 1.6rem);
 }
@@ -253,7 +255,7 @@ h4 {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: var(--brand-primary);
+  /* color: var(--accent); */
 }
 .copy-link {
   opacity: 0;
@@ -282,7 +284,10 @@ a {
 }
 a:hover {
   text-decoration: underline;
+  color: var(--hover);
 }
+
+
 
 /* Flourish embeds */
 .flourish-embed {
@@ -505,4 +510,8 @@ footer {
 }
 .card .data-list {
   margin-top: 0.25rem;
+}
+
+.card p{
+  text-align: justify;
 }
